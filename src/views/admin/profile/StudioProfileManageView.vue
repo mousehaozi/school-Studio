@@ -211,8 +211,9 @@
       destroy-on-close
       align-center
       top="5vh"
+      fullscreen
     >
-      <div style="max-height: 70vh; overflow-y: auto; padding-right: 10px">
+      <div style="padding-right: 10px; padding-bottom: 20px;">
         <el-form ref="formRef" :model="form" :rules="rules" label-width="96px">
           <el-form-item label="标题" prop="title">
             <el-input v-model="form.title" placeholder="请输入页面标题" />
@@ -361,7 +362,8 @@
                 border: 1px solid #ccc;
                 width: 100%;
                 border-radius: 4px;
-                overflow: hidden;
+                position: relative;
+                z-index: 99;
               "
             >
               <Toolbar
@@ -533,7 +535,7 @@ async function customUploadCover(options) {
 const editorRef = shallowRef();
 const mode = "default";
 const toolbarConfig = {
-  excludeKeys: ["group-video"], // Remove upload video menu
+  // excludeKeys: ["group-video"], // Remove upload video menu
 };
 const editorConfig = {
   placeholder: "请输入内容...",
@@ -551,6 +553,22 @@ const editorConfig = {
         } catch (e) {
           console.error(e);
           ElMessage.error("图片上传出错");
+        }
+      },
+    },
+    uploadVideo: {
+      async customUpload(file, insertFn) {
+        try {
+          const res = await uploadAdminImage(file);
+          const url = res.data?.data?.url;
+          if (url) {
+            insertFn(url);
+          } else {
+            ElMessage.error("视频上传失败");
+          }
+        } catch (e) {
+          console.error(e);
+          ElMessage.error("视频上传出错");
         }
       },
     },
@@ -874,10 +892,22 @@ onMounted(fetchList);
   word-break: break-all;
   font-size: 13px;
 }
-.profile-content :deep(img) {
+.profile-content :deep(img),
+.profile-content :deep(video),
+.profile-content :deep(iframe) {
   max-width: 100%;
   border-radius: 8px;
   margin: 10px 0;
+}
+
+/* Ensure editor content itself makes media responsive */
+:deep(.w-e-text-container img),
+:deep(.w-e-text-container video),
+:deep(.w-e-text-container iframe) {
+  max-width: 100%;
+}
+:deep([data-w-e-type="video"]) {
+  max-width: 100%;
 }
 .cover-uploader {
   display: flex;
