@@ -5,8 +5,16 @@
         <div class="page-header">
           <div class="page-title">工作室管理</div>
           <div class="page-actions">
-            <el-button type="primary" plain :icon="Plus" @click="openCreate">新增工作室</el-button>
-            <el-button plain :icon="Refresh" :loading="loading" @click="fetchData">刷新</el-button>
+            <el-button type="primary" plain :icon="Plus" @click="openCreate"
+              >新增工作室</el-button
+            >
+            <el-button
+              plain
+              :icon="Refresh"
+              :loading="loading"
+              @click="fetchData"
+              >刷新</el-button
+            >
           </div>
         </div>
       </template>
@@ -24,17 +32,40 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="名称" min-width="150" />
+        <el-table-column label="排序" width="140" align="center">
+          <template #default="{ row }">
+            <el-input
+              v-model="row.sortOrder"
+              size="small"
+              placeholder="排序"
+              inputmode="numeric"
+              :disabled="sortSavingMap[row.id]"
+              @blur="handleSortOrderBlur(row)"
+            />
+          </template>
+        </el-table-column>
         <el-table-column prop="studioLevel" label="类型" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.studioLevel === 0 ? 'warning' : 'success'" size="small">
+            <el-tag
+              :type="row.studioLevel === 0 ? 'warning' : 'success'"
+              size="small"
+            >
               {{ row.studioLevel === 0 ? "国家级" : "省市级" }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="simpleIntro" label="简介" min-width="250" show-overflow-tooltip />
+        <el-table-column
+          prop="simpleIntro"
+          label="简介"
+          min-width="250"
+          show-overflow-tooltip
+        />
         <el-table-column prop="enableStatus" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.enableStatus === 1 ? 'success' : 'info'" size="small">
+            <el-tag
+              :type="row.enableStatus === 1 ? 'success' : 'info'"
+              size="small"
+            >
               {{ row.enableStatus === 1 ? "启用" : "停用" }}
             </el-tag>
           </template>
@@ -53,11 +84,18 @@
                   <el-dropdown-item :icon="Edit" @click="openEdit(row)">
                     编辑
                   </el-dropdown-item>
-                  <el-dropdown-item :icon="row.enableStatus === 1 ? VideoPause : VideoPlay"
-                    @click="handleToggleStatus(row)">
+                  <el-dropdown-item
+                    :icon="row.enableStatus === 1 ? VideoPause : VideoPlay"
+                    @click="handleToggleStatus(row)"
+                  >
                     {{ row.enableStatus === 1 ? "停用" : "启用" }}
                   </el-dropdown-item>
-                  <el-dropdown-item divided :icon="Delete" @click="handleDelete(row)" style="color: #f56c6c">
+                  <el-dropdown-item
+                    divided
+                    :icon="Delete"
+                    @click="handleDelete(row)"
+                    style="color: #f56c6c"
+                  >
                     删除
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -69,16 +107,34 @@
     </CommonCard>
 
     <!-- 编辑/新增弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="isEdit ? '编辑工作室' : '新增工作室'" width="500px" align-center>
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px" style="padding-right: 20px">
+    <el-dialog
+      v-model="dialogVisible"
+      :title="isEdit ? '编辑工作室' : '新增工作室'"
+      width="500px"
+      align-center
+    >
+      <el-form
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        label-width="100px"
+        style="padding-right: 20px"
+      >
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入工作室名称" />
         </el-form-item>
         <el-form-item label="图标 URL" prop="iconUrl">
           <div class="upload-container">
-            <el-input v-model="form.iconUrl" placeholder="请输入图片 URL 或上传">
+            <el-input
+              v-model="form.iconUrl"
+              placeholder="请输入图片 URL 或上传"
+            >
               <template #append>
-                <el-upload :http-request="handleUpload" :show-file-list="false" accept="image/*">
+                <el-upload
+                  :http-request="handleUpload"
+                  :show-file-list="false"
+                  accept="image/*"
+                >
                   <el-button plain :icon="Upload">上传</el-button>
                 </el-upload>
               </template>
@@ -89,7 +145,19 @@
           </div>
         </el-form-item>
         <el-form-item label="简介" prop="simpleIntro">
-          <el-input v-model="form.simpleIntro" type="textarea" :rows="3" placeholder="请输入简介" />
+          <el-input
+            v-model="form.simpleIntro"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入简介"
+          />
+        </el-form-item>
+        <el-form-item label="排序" prop="sortOrder">
+          <el-input
+            v-model="form.sortOrder"
+            placeholder="请输入排序值"
+            inputmode="numeric"
+          />
         </el-form-item>
         <el-form-item label="类型" prop="studioLevel">
           <el-radio-group v-model="form.studioLevel">
@@ -106,7 +174,9 @@
       </el-form>
       <template #footer>
         <el-button plain @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" plain :loading="saving" @click="submitForm">保存</el-button>
+        <el-button type="primary" plain :loading="saving" @click="submitForm"
+          >保存</el-button
+        >
       </template>
     </el-dialog>
   </div>
@@ -141,6 +211,26 @@ const userStore = useUserStore();
 const loading = ref(false);
 const saving = ref(false);
 const records = ref([]);
+const sortSavingMap = reactive({});
+
+function normalizeStudioRecord(item) {
+  const normalizedSortOrder = String(item.sortOrder ?? 0);
+  return {
+    ...item,
+    sortOrder: normalizedSortOrder,
+    _originalSortOrder: normalizedSortOrder,
+  };
+}
+
+function sortStudioRecords(list) {
+  return [...list].sort((a, b) => {
+    const aSort = Number(a.sortOrder ?? 0);
+    const bSort = Number(b.sortOrder ?? 0);
+
+    if (aSort !== bSort) return aSort - bSort;
+    return Number(a.id ?? 0) - Number(b.id ?? 0);
+  });
+}
 
 // 列表获取
 async function fetchData() {
@@ -150,7 +240,9 @@ async function fetchData() {
     // 根据 spec，返回的是对象，但通常 list 接口会返回数组或包含数组的对象
     // 如果 spec 中 example 是 timestamp, status 等，可能是错误示例或者结构不完整
     // 我们假设它返回 data: [] 或者直接是数组
-    records.value = res.data?.data || [];
+    records.value = sortStudioRecords(
+      (res.data?.data || []).map(normalizeStudioRecord),
+    );
   } catch (error) {
     console.error("获取工作室列表失败", error);
   } finally {
@@ -168,6 +260,7 @@ const form = reactive({
   name: "",
   iconUrl: "",
   simpleIntro: "",
+  sortOrder: "0",
   studioLevel: 1, // 默认省部级
   enableStatus: 1,
 });
@@ -176,6 +269,10 @@ const rules = {
   name: [{ required: true, message: "请输入名称", trigger: "blur" }],
   iconUrl: [{ required: true, message: "请输入图标 URL", trigger: "blur" }],
   simpleIntro: [{ required: true, message: "请输入简介", trigger: "blur" }],
+  sortOrder: [
+    { required: true, message: "请输入排序值", trigger: "blur" },
+    { pattern: /^\d+$/, message: "排序值只能为数字", trigger: "blur" },
+  ],
 };
 
 function openCreate() {
@@ -184,6 +281,7 @@ function openCreate() {
   form.name = "";
   form.iconUrl = "";
   form.simpleIntro = "";
+  form.sortOrder = "0";
   form.studioLevel = 1;
   form.enableStatus = 1;
   dialogVisible.value = true;
@@ -195,6 +293,7 @@ function openEdit(row) {
   form.name = row.name;
   form.iconUrl = row.iconUrl;
   form.simpleIntro = row.simpleIntro;
+  form.sortOrder = String(row.sortOrder ?? 0);
   form.studioLevel = row.studioLevel ?? 1;
   form.enableStatus = row.enableStatus;
   dialogVisible.value = true;
@@ -222,6 +321,47 @@ async function submitForm() {
       }
     }
   });
+}
+
+async function handleSortOrderBlur(row) {
+  const nextValue = String(row.sortOrder ?? "").trim();
+
+  if (!/^\d+$/.test(nextValue)) {
+    ElMessage.error("排序值只能为数字");
+    row.sortOrder = String(row.sortOrder ?? 0).replace(/\D/g, "") || "0";
+    await fetchData();
+    return;
+  }
+
+  if (
+    sortSavingMap[row.id] ||
+    nextValue === String(row._originalSortOrder ?? row.sortOrder)
+  ) {
+    row.sortOrder = nextValue;
+    return;
+  }
+
+  sortSavingMap[row.id] = true;
+  try {
+    await updateAdminStudio(row.id, {
+      name: row.name,
+      iconUrl: row.iconUrl,
+      simpleIntro: row.simpleIntro,
+      sortOrder: nextValue,
+      studioLevel: row.studioLevel,
+      enableStatus: row.enableStatus,
+    });
+    row.sortOrder = nextValue;
+    row._originalSortOrder = nextValue;
+    records.value = sortStudioRecords(records.value);
+    ElMessage.success("排序已更新");
+  } catch (error) {
+    console.error("更新排序失败", error);
+    ElMessage.error("更新排序失败");
+    await fetchData();
+  } finally {
+    sortSavingMap[row.id] = false;
+  }
 }
 
 // 状态切换

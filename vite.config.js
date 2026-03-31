@@ -7,7 +7,13 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx(), vueDevTools()],
+  plugins: [
+    vue(),
+    vueJsx(),
+    vueDevTools({
+      launchEditor: "zed",
+    }),
+  ],
   define: {
     global: "window",
   },
@@ -17,8 +23,8 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api": {
-        target: "http://107.174.50.174:8080",
-        //  target: "http://192.168.0.121:8080",
+        // target: "http://107.174.50.174:8080",
+        target: "http://192.168.0.121:8080",
         changeOrigin: true,
         secure: false,
         ws: true,

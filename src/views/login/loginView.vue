@@ -3,7 +3,7 @@
     <div class="login-card">
       <div class="login-header">
         <div class="logo-wrapper">
-          <img src="@/static/appLogo.png" alt="Logo" class="login-logo" />
+          <img src="@/static/logo.png" alt="Logo" class="login-logo" />
         </div>
         <h2>创新工作室管理系统</h2>
         <div class="divider"></div>
