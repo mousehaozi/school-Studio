@@ -1,46 +1,19 @@
 <template>
   <div class="page">
-    <CommonCard
-      shadow="never"
-      class="page-card"
-      body-style="overflow-y: auto; height: 100%;"
-    >
+    <CommonCard shadow="never" class="page-card" body-style="overflow-y: auto; height: 100%;">
       <template #header>
         <div class="page-header">
           <div class="page-title">工作室简介</div>
           <div class="page-actions">
             <!-- 工作室选择器 -->
-            <el-select
-              v-if="studioList.length > 1"
-              v-model="selectedStudioId"
-              placeholder="请选择工作室"
-              style="width: 220px; margin-right: 12px"
-              @change="handleStudioChange"
-            >
-              <el-option
-                v-for="item in studioList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
+            <el-select v-if="studioList.length > 1" v-model="selectedStudioId" placeholder="请选择工作室"
+              style="width: 220px; margin-right: 12px" @change="handleStudioChange">
+              <el-option v-for="item in studioList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
 
-            <el-button
-              type="primary"
-              plain
-              :icon="Edit"
-              :disabled="!selectedStudioId"
-              @click="openOverwrite"
-              >{{ currentProfile ? "编辑简介" : "添加简介" }}</el-button
-            >
-            <el-button
-              plain
-              :icon="Refresh"
-              :loading="loading"
-              :disabled="loading"
-              @click="fetchList"
-              >刷新</el-button
-            >
+            <el-button type="primary" plain :icon="Edit" :disabled="!selectedStudioId" @click="openOverwrite">{{
+              currentProfile ? "编辑简介" : "添加简介" }}</el-button>
+            <el-button plain :icon="Refresh" :loading="loading" :disabled="loading" @click="fetchList">刷新</el-button>
           </div>
         </div>
       </template>
@@ -48,22 +21,15 @@
       <div v-loading="loading">
         <div v-if="currentProfile" class="profile-detail">
           <div class="profile-header">
-            <el-image
-              v-if="currentProfile.coverUrl"
-              :src="currentProfile.coverUrl"
-              fit="contain"
-              class="profile-cover"
-              :preview-src-list="[currentProfile.coverUrl]"
-            />
+            <el-image v-if="currentProfile.coverUrl" :src="currentProfile.coverUrl" fit="contain" class="profile-cover"
+              :preview-src-list="[currentProfile.coverUrl]" />
             <div class="profile-info">
               <div class="profile-title-row">
                 <h2>{{ currentProfile.title }}</h2>
               </div>
               <div class="profile-meta">
-                <span class="time"
-                  >更新时间:
-                  {{ formatDateTime(currentProfile.updatedAt) }}</span
-                >
+                <span class="time">更新时间:
+                  {{ formatDateTime(currentProfile.updatedAt) }}</span>
               </div>
             </div>
           </div>
@@ -72,10 +38,7 @@
             <!-- 核心详情 -->
             <section class="info-section">
               <el-divider content-position="left">简介内容</el-divider>
-              <div
-                class="profile-content ql-snow"
-                v-html="currentProfile.contentHtml"
-              ></div>
+              <div class="profile-content ql-snow" v-html="currentProfile.contentHtml"></div>
             </section>
 
             <!-- 详细资料网格 -->
@@ -103,38 +66,22 @@
                 <section class="info-section">
                   <el-divider content-position="left">核心功能</el-divider>
                   <div class="info-card tag-group">
-                    <el-tag
-                      v-for="item in (currentProfile.coreFunctions || '')
-                        .split(',')
-                        .filter((i) => i)"
-                      :key="item"
-                      class="m-1"
-                    >
+                    <el-tag v-for="item in (currentProfile.coreFunctions || '')
+                      .split(',')
+                      .filter((i) => i)" :key="item" class="m-1">
                       {{ item }}
                     </el-tag>
-                    <span
-                      v-if="!currentProfile.coreFunctions"
-                      class="empty-text"
-                      >未设置</span
-                    >
+                    <span v-if="!currentProfile.coreFunctions" class="empty-text">未设置</span>
                   </div>
                 </section>
                 <section class="info-section" style="margin-top: 24px">
                   <el-divider content-position="left">组织架构</el-divider>
                   <div class="info-card tag-group">
-                    <el-tag
-                      v-for="item in tryParse(currentProfile.orgStructure)"
-                      :key="item"
-                      type="success"
-                      class="m-1"
-                    >
+                    <el-tag v-for="item in tryParse(currentProfile.orgStructure)" :key="item" type="success"
+                      class="m-1">
                       {{ item }}
                     </el-tag>
-                    <span
-                      v-if="!tryParse(currentProfile.orgStructure).length"
-                      class="empty-text"
-                      >未设置</span
-                    >
+                    <span v-if="!tryParse(currentProfile.orgStructure).length" class="empty-text">未设置</span>
                   </div>
                 </section>
               </el-col>
@@ -144,36 +91,37 @@
             <section class="info-section">
               <el-divider content-position="left">联系我们</el-divider>
               <div class="contact-grid">
-                <div
-                  v-for="(contact, index) in tryParse(currentProfile.contactUs)"
-                  :key="index"
-                  class="contact-card"
-                >
+                <div v-for="(contact, index) in tryParse(currentProfile.contactUs)" :key="index" class="contact-card">
                   <div class="contact-role">
-                    <el-icon><CollectionTag /></el-icon>
+                    <el-icon>
+                      <CollectionTag />
+                    </el-icon>
                     {{ contact.distraction || "-" }}
                   </div>
                   <div class="contact-details">
                     <div class="detail-row">
-                      <el-icon><User /></el-icon>
+                      <el-icon>
+                        <User />
+                      </el-icon>
                       <span class="name">{{ contact.name }}</span>
                     </div>
                     <div class="detail-row">
-                      <el-icon><Phone /></el-icon>
+                      <el-icon>
+                        <Phone />
+                      </el-icon>
                       <span class="phone">{{ contact.phone }}</span>
                     </div>
                     <div v-if="contact.wechatUrl" class="detail-row">
-                      <el-icon><Link /></el-icon>
+                      <el-icon>
+                        <Link />
+                      </el-icon>
                       <span class="wechat-link" title="公众号地址">{{
                         contact.wechatUrl
                       }}</span>
                     </div>
                   </div>
                 </div>
-                <div
-                  v-if="!tryParse(currentProfile.contactUs).length"
-                  class="empty-text"
-                >
+                <div v-if="!tryParse(currentProfile.contactUs).length" class="empty-text">
                   未设置
                 </div>
               </div>
@@ -181,38 +129,24 @@
           </div>
         </div>
 
-        <el-empty
-          v-else
-          :description="
-            studioList.length > 0
-              ? '请在上方选择工作室以查看详情'
-              : '暂无工作室数据'
-          "
-        >
+        <el-empty v-else :description="studioList.length > 0
+          ? '请在上方选择工作室以查看详情'
+          : '暂无工作室数据'
+          ">
           <template #image>
-            <el-icon
-              v-if="studioList.length > 0"
-              style="
+            <el-icon v-if="studioList.length > 0" style="
                 font-size: 48px;
                 color: var(--el-color-primary);
                 opacity: 0.5;
-              "
-              ><School
-            /></el-icon>
+              ">
+              <School />
+            </el-icon>
           </template>
         </el-empty>
       </div>
     </CommonCard>
 
-    <el-dialog
-      v-model="dialogVisible"
-      title="编辑当前简介"
-      width="960px"
-      destroy-on-close
-      align-center
-      top="5vh"
-      fullscreen
-    >
+    <el-dialog v-model="dialogVisible" title="编辑当前简介" width="960px" destroy-on-close align-center top="5vh" fullscreen>
       <div style="padding-right: 10px; padding-bottom: 20px;">
         <el-form ref="formRef" :model="form" :rules="rules" label-width="96px">
           <el-form-item label="标题" prop="title">
@@ -228,174 +162,86 @@
           </el-row>
 
           <el-form-item label="领衔人介绍" prop="leaderIntro">
-            <el-input
-              v-model="form.leaderIntro"
-              type="textarea"
-              :rows="3"
-              placeholder="领衔人简介"
-            />
+            <el-input v-model="form.leaderIntro" type="textarea" :rows="3" placeholder="领衔人简介" />
           </el-form-item>
 
           <el-form-item label="核心功能" prop="coreFunctions">
-            <el-input
-              v-model="form.coreFunctions"
-              placeholder="输入功能，多个请用英文逗号(,)分隔"
-            />
+            <el-input v-model="form.coreFunctions" placeholder="输入功能，多个请用英文逗号(,)分隔" />
           </el-form-item>
 
           <el-form-item label="组织架构" prop="orgStructure">
             <div class="tag-input-group">
-              <el-tag
-                v-for="tag in form.orgStructure"
-                :key="tag"
-                closable
-                @close="removeOrgTag(tag)"
-                class="m-1"
-              >
+              <el-tag v-for="tag in form.orgStructure" :key="tag" closable @close="removeOrgTag(tag)" class="m-1">
                 {{ tag }}
               </el-tag>
-              <el-input
-                v-if="tagInputVisible"
-                ref="tagInputRef"
-                v-model="tagInputValue"
-                size="small"
-                style="width: 100px"
-                @keyup.enter="handleTagInputConfirm"
-                @blur="handleTagInputConfirm"
-              />
-              <el-button v-else size="small" plain @click="showTagInput"
-                >+ 添加架构</el-button
-              >
+              <el-input v-if="tagInputVisible" ref="tagInputRef" v-model="tagInputValue" size="small"
+                style="width: 100px" @keyup.enter="handleTagInputConfirm" @blur="handleTagInputConfirm" />
+              <el-button v-else size="small" plain @click="showTagInput">+ 添加架构</el-button>
             </div>
           </el-form-item>
 
           <el-form-item label="联系人" prop="contactUs">
             <div class="contact-form-list">
-              <div
-                v-for="(item, index) in form.contactUs"
-                :key="index"
-                class="contact-form-item"
-              >
+              <div v-for="(item, index) in form.contactUs" :key="index" class="contact-form-item">
                 <el-row :gutter="10">
                   <el-col :span="5">
-                    <el-input
-                      v-model="item.name"
-                      placeholder="姓名"
-                      size="small"
-                    />
+                    <el-input v-model="item.name" placeholder="姓名" size="small" />
                   </el-col>
                   <el-col :span="5">
-                    <el-input
-                      v-model="item.phone"
-                      placeholder="电话"
-                      size="small"
-                    />
+                    <el-input v-model="item.phone" placeholder="电话" size="small" />
                   </el-col>
                   <el-col :span="5">
-                    <el-input
-                      v-model="item.distraction"
-                      placeholder="职位/说明"
-                      size="small"
-                    />
+                    <el-input v-model="item.distraction" placeholder="职位/说明" size="small" />
                   </el-col>
                   <el-col :span="7">
-                    <el-input
-                      v-model="item.wechatUrl"
-                      placeholder="公众号链接/地址"
-                      size="small"
-                    />
+                    <el-input v-model="item.wechatUrl" placeholder="公众号链接/地址" size="small" />
                   </el-col>
                   <el-col :span="2">
-                    <el-button
-                      type="danger"
-                      :icon="Close"
-                      circle
-                      plain
-                      size="small"
-                      @click="removeContact(index)"
-                    />
+                    <el-button type="danger" :icon="Close" circle plain size="small" @click="removeContact(index)" />
                   </el-col>
                 </el-row>
               </div>
-              <el-button type="primary" plain size="small" @click="addContact"
-                >+ 添加联系人</el-button
-              >
+              <el-button type="primary" plain size="small" @click="addContact">+ 添加联系人</el-button>
             </div>
           </el-form-item>
 
           <el-form-item label="封面图" prop="coverUrl">
             <div class="cover-uploader">
-              <el-upload
-                :http-request="customUploadCover"
-                :show-file-list="false"
-                accept="image/*"
-              >
-                <el-button type="primary" plain :icon="Upload"
-                  >上传图片</el-button
-                >
+              <el-upload :http-request="customUploadCover" :show-file-list="false" accept="image/*">
+                <el-button type="primary" plain :icon="Upload">上传图片</el-button>
               </el-upload>
-              <el-progress
-                v-if="coverProgressVisible"
-                :percentage="coverProgress"
-                style="max-width: 200px"
-              />
+              <el-progress v-if="coverProgressVisible" :percentage="coverProgress" style="max-width: 200px" />
               <div class="cover-preview" v-if="form.coverUrl">
-                <el-image
-                  :src="form.coverUrl"
-                  fit="cover"
-                  style="
+                <el-image :src="form.coverUrl" fit="cover" style="
                     width: 120px;
                     height: 68px;
                     border-radius: 6px;
                     border: 1px solid #dcdfe6;
-                  "
-                />
-                <el-button text plain type="danger" @click="form.coverUrl = ''"
-                  >移除</el-button
-                >
+                  " />
+                <el-button text plain type="danger" @click="form.coverUrl = ''">移除</el-button>
               </div>
             </div>
           </el-form-item>
           <el-form-item label="内容简介" prop="contentHtml">
-            <div
-              style="
+            <div style="
                 border: 1px solid #ccc;
                 width: 100%;
                 border-radius: 4px;
                 position: relative;
                 z-index: 99;
-              "
-            >
-              <Toolbar
-                style="border-bottom: 1px solid #ccc"
-                :editor="editorRef"
-                :defaultConfig="toolbarConfig"
-                :mode="mode"
-              />
-              <Editor
-                style="height: 400px; overflow-y: hidden"
-                v-model="form.contentHtml"
-                :defaultConfig="editorConfig"
-                :mode="mode"
-                @onCreated="handleCreated"
-              />
+              ">
+              <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig"
+                :mode="mode" />
+              <Editor style="height: 400px; overflow-y: hidden" v-model="form.contentHtml" :defaultConfig="editorConfig"
+                :mode="mode" @onCreated="handleCreated" />
             </div>
           </el-form-item>
         </el-form>
       </div>
 
       <template #footer>
-        <el-button plain :icon="Close" @click="dialogVisible = false"
-          >取消</el-button
-        >
-        <el-button
-          type="primary"
-          plain
-          :icon="Check"
-          :loading="saving"
-          @click="submit"
-          >提交</el-button
-        >
+        <el-button plain :icon="Close" @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" plain :icon="Check" :loading="saving" @click="submit">提交</el-button>
       </template>
     </el-dialog>
   </div>
@@ -433,6 +279,9 @@ import {
   getAdminStudios,
 } from "@/api/admin";
 import { formatDateTime } from "@/utils/format";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 const compressToWebp = (file, quality = 0.8) => {
   return new Promise((resolve) => {
@@ -658,45 +507,51 @@ onBeforeUnmount(() => {
 const rules = {
   title: [{ required: true, message: "请填写标题", trigger: "blur" }],
   contentHtml: [{ required: true, message: "请填写内容", trigger: "blur" }],
+  leaderName: [{ required: true, message: "请填写领衔人姓名", trigger: "blur" }],
+  leaderIntro: [{ required: true, message: "请填写领衔人介绍", trigger: "blur" }],
+  coreFunctions: [{ required: true, message: "请填写核心功能", trigger: "blur" }],
 };
 
 async function fetchList() {
   loading.value = true;
   try {
-    const sRes = await getAdminStudios();
-    studioList.value = sRes.data?.data || [];
-    studioMap.value = {};
-    studioList.value.forEach((s) => {
-      studioMap.value[s.id] = s.name;
-    });
+    if (userStore.role === 'SUPERADMIN') {
+      const sRes = await getAdminStudios();
+      studioList.value = sRes.data?.data || [];
+      studioMap.value = {};
+      studioList.value.forEach((s) => {
+        studioMap.value[s.id] = s.name;
+      });
+    } else {
+      studioList.value = [];
+      studioMap.value = {};
+    }
 
     const res = await getAdminStudioProfiles();
     const data = res.data?.data;
     profileList.value = Array.isArray(data) ? data : [];
 
-    if (studioList.value.length === 1) {
-      // 只有一个时，自动选择
+    if (userStore.role !== 'SUPERADMIN') {
+      // 逻辑调整：如果是普通工作室管理员，直接使用返回的第一个简介
+      selectedStudioId.value = userStore.studioId;
+      currentProfile.value = profileList.value.length > 0 ? profileList.value[0] : null;
+    } else if (studioList.value.length === 1) {
+      // 只有一个时（超级管理员获取到的只有一个工作室），自动选择
       selectedStudioId.value = studioList.value[0].id;
       currentProfile.value =
         profileList.value.find((p) => p.studioId === selectedStudioId.value) ||
         null;
     } else if (studioList.value.length > 1) {
-      // 多个时，如果之前没选过或者选的已经不在列表中了，也尝试自动选择第一个？或者保持现状
+      // 多个时（超级管理员），尝试保持选择或默认选第一个
       if (
         !selectedStudioId.value ||
         !studioList.value.find((s) => s.id === selectedStudioId.value)
       ) {
-        // 如果没有选过，为了用户体验，默认选第一个吧
-        if (studioList.value.length > 0) {
-          selectedStudioId.value = studioList.value[0].id;
-          currentProfile.value =
-            profileList.value.find(
-              (p) => p.studioId === selectedStudioId.value
-            ) || null;
-        } else {
-          selectedStudioId.value = null;
-          currentProfile.value = null;
-        }
+        selectedStudioId.value = studioList.value[0].id;
+        currentProfile.value =
+          profileList.value.find(
+            (p) => p.studioId === selectedStudioId.value
+          ) || null;
       } else {
         currentProfile.value =
           profileList.value.find(
@@ -751,6 +606,7 @@ function openOverwrite() {
 async function submit() {
   if (!formRef.value) return;
   await formRef.value.validate(async (valid) => {
+    if (!valid) return;
     if (!form.studioId) {
       ElMessage.warning("请先选择所属工作室");
       return;
@@ -758,10 +614,37 @@ async function submit() {
     saving.value = true;
     try {
       const { studioId, ...restForm } = form;
+      
+      // 清理富文本内容中图片关联的缩进和两端对齐样式
+      let cleanContentHtml = restForm.contentHtml;
+      cleanContentHtml = cleanContentHtml.replace(
+        /<p([^>]*)style="([^"]*)"([^>]*)>(\s*<img[^>]+>\s*)<\/p>/gi,
+        (match, p1, style, p3, imgContent) => {
+          let newStyle = style
+            .replace(/text-indent:\s*[^;]+;?/gi, '')
+            .replace(/text-align:\s*justify;?/gi, '')
+            .trim();
+          let styleAttr = newStyle ? ` style="${newStyle}"` : '';
+          return `<p${p1}${styleAttr}${p3}>${imgContent}</p>`;
+        }
+      );
+      cleanContentHtml = cleanContentHtml.replace(
+        /(<img[^>]*)style="([^"]*)"([^>]*>)/gi,
+        (match, p1, style, p3) => {
+          let newStyle = style
+            .replace(/text-indent:\s*[^;]+;?/gi, '')
+            .replace(/text-align:\s*justify;?/gi, '')
+            .trim();
+          let styleAttr = newStyle ? ` style="${newStyle}"` : '';
+          return `${p1}${styleAttr}${p3}`;
+        }
+      );
+      
       await overwriteAdminCurrentStudioProfile(
         {
           id: currentProfile.value?.id,
           ...restForm,
+          contentHtml: cleanContentHtml,
           orgStructure: JSON.stringify(form.orgStructure),
           contactUs: JSON.stringify(form.contactUs),
         },
@@ -786,17 +669,21 @@ onMounted(fetchList);
   justify-content: space-between;
   gap: 12px;
 }
+
 .page-title {
   font-weight: 700;
   font-size: 18px;
 }
+
 .page-actions {
   display: inline-flex;
   gap: 8px;
 }
+
 .profile-detail {
   padding: 0 10px 20px;
 }
+
 .profile-header {
   display: flex;
   gap: 32px;
@@ -806,12 +693,14 @@ onMounted(fetchList);
   border-radius: 16px;
   border: 1px solid #f0f3f8;
 }
+
 .profile-title-row {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 8px;
 }
+
 .profile-cover {
   width: 280px;
   height: 157px;
@@ -820,12 +709,14 @@ onMounted(fetchList);
   flex-shrink: 0;
   background: #ffffff;
 }
+
 .profile-info {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .profile-info h2 {
   margin: 0;
   font-size: 28px;
@@ -833,6 +724,7 @@ onMounted(fetchList);
   color: #1a1a1a;
   letter-spacing: -0.5px;
 }
+
 .profile-meta {
   color: #909399;
   font-size: 14px;
@@ -859,9 +751,11 @@ onMounted(fetchList);
 .side-item {
   margin-bottom: 20px;
 }
+
 .side-item:last-child {
   margin-bottom: 0;
 }
+
 .side-label {
   font-size: 13px;
   text-transform: uppercase;
@@ -870,11 +764,13 @@ onMounted(fetchList);
   margin-bottom: 6px;
   font-weight: 600;
 }
+
 .side-value {
   color: #2d3748;
   font-weight: 600;
   font-size: 16px;
 }
+
 .intro-text {
   font-weight: 400;
   line-height: 1.6;
@@ -951,21 +847,25 @@ onMounted(fetchList);
   color: var(--el-color-primary);
   font-family: inherit;
 }
+
 .empty-text {
   color: #c0c4cc;
   font-size: 12px;
   font-style: italic;
 }
+
 .profile-content {
   line-height: 1.8;
   color: #444;
   padding: 10px;
 }
+
 .wechat-link {
   color: #67c23a;
   word-break: break-all;
   font-size: 13px;
 }
+
 .profile-content :deep(img),
 .profile-content :deep(video),
 .profile-content :deep(iframe) {
@@ -980,28 +880,34 @@ onMounted(fetchList);
 :deep(.w-e-text-container iframe) {
   max-width: 100%;
 }
+
 :deep([data-w-e-type="video"]) {
   max-width: 100%;
 }
+
 .cover-uploader {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
 .cover-preview {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
 .m-1 {
   margin: 4px;
 }
+
 .tag-input-group {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
+
 .contact-form-item {
   background: #f8f9fb;
   padding: 12px;
@@ -1009,6 +915,7 @@ onMounted(fetchList);
   margin-bottom: 15px;
   border: 1px dashed #dcdfe6;
 }
+
 .contact-form-list {
   display: flex;
   flex-direction: column;

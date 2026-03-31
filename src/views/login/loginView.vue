@@ -112,6 +112,8 @@ const handleLogin = async () => {
       userStore.setToken(token, {
         storage: rememberMe.value ? "local" : "session",
         studioId: res.data?.data?.studioId,
+        role: res.data?.data?.role,
+        username: res.data?.data?.username,
       });
       ElMessage.success("欢迎回来");
       router.push("/admin");

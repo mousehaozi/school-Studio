@@ -66,6 +66,11 @@ const router = createRouter({
           name: "admin-studios",
           component: () => import("@/views/admin/studio/StudioManageView.vue"),
         },
+        {
+          path: "system-configs",
+          name: "admin-system-configs",
+          component: () => import("@/views/admin/system/SystemConfigView.vue"),
+        },
       ],
     },
     {

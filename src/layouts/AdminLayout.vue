@@ -14,7 +14,7 @@
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="admin-user">
             <el-icon class="admin-user__icon"><User /></el-icon>
-            <span class="admin-user__label">管理员</span>
+            <span class="admin-user__label">{{ userStore.username || '管理员' }}</span>
             <el-icon class="admin-user__caret"><ArrowDown /></el-icon>
           </span>
           <template #dropdown>
@@ -34,17 +34,17 @@
           router
           class="admin-menu"
         >
-          <el-menu-item index="/admin/account" v-if="!userStore.studioId">
+          <el-menu-item index="/admin/account" v-if="userStore.role === 'SUPERADMIN'">
             <el-icon><User /></el-icon>
             <span>账号系统</span>
           </el-menu-item>
 
-          <el-menu-item index="/admin/studios" v-if="!userStore.studioId">
+          <el-menu-item index="/admin/studios" v-if="userStore.role === 'SUPERADMIN'">
             <el-icon><School /></el-icon>
             <span>工作室管理</span>
           </el-menu-item>
 
-          <el-menu-item index="/admin/banner" v-if="!userStore.studioId">
+          <el-menu-item index="/admin/banner" v-if="userStore.role === 'SUPERADMIN'">
             <el-icon><Picture /></el-icon>
             <span>轮播图</span>
           </el-menu-item>
@@ -79,9 +79,14 @@
             </el-menu-item>
           </el-sub-menu>
 
-          <el-menu-item index="/admin/chat" v-if="!userStore.studioId">
+          <el-menu-item index="/admin/chat" v-if="userStore.role === 'SUPERADMIN'">
             <el-icon><ChatDotRound /></el-icon>
             <span>在线咨询</span>
+          </el-menu-item>
+
+          <el-menu-item index="/admin/system-configs" v-if="userStore.role === 'SUPERADMIN'">
+            <el-icon><Setting /></el-icon>
+            <span>系统配置</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -122,6 +127,7 @@ import {
   Postcard,
   Reading,
   School,
+  Setting,
   User,
 } from "@element-plus/icons-vue";
 
