@@ -58,7 +58,7 @@ function handleCommand(cmd) {
         <div class="admin-brand" @click="goDefault">
           <img src="@/static/logo.png" alt="Logo" class="admin-brand__logo" />
           <div class="admin-brand__text">
-            <div class="admin-brand__sub">成果转移转化创新工作室</div>
+            <div class="admin-brand__sub">劳模工匠创新工作室管理后台</div>
           </div>
         </div>
       </div>
@@ -67,9 +67,9 @@ function handleCommand(cmd) {
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="admin-user">
             <el-icon class="admin-user__icon"><User /></el-icon>
-            <span class="admin-user__label">{{
-              userStore.username || "管理员"
-            }}</span>
+            <span class="admin-user__label">
+              {{ userStore.username || "管理员" }}
+            </span>
             <el-icon class="admin-user__caret"><ArrowDown /></el-icon>
           </span>
           <template #dropdown>

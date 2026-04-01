@@ -285,9 +285,9 @@ onMounted(() => {
               @click="fetchPage"
               >刷新</el-button
             >
-            <el-button type="primary" :icon="Plus" @click="openCreate"
-              >新增用户</el-button
-            >
+            <el-button type="primary" plain :icon="Plus" @click="openCreate"
+              >新增用户
+            </el-button>
           </div>
         </div>
       </template>

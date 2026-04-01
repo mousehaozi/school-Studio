@@ -240,15 +240,15 @@ onMounted(() => {
         <div class="page-header">
           <div class="page-title">工作室管理</div>
           <div class="page-actions">
-            <el-button type="primary" plain :icon="Plus" @click="openCreate"
-              >新增工作室</el-button
-            >
             <el-button
               plain
               :icon="Refresh"
               :loading="loading"
               @click="fetchData"
               >刷新</el-button
+            >
+            <el-button type="primary" plain :icon="Plus" @click="openCreate"
+              >新增工作室</el-button
             >
           </div>
         </div>
