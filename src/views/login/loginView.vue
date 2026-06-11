@@ -105,7 +105,6 @@ const handleLogin = async () => {
         <el-form-item>
           <el-button
             type="primary"
-            plain
             class="submit-btn"
             :loading="loading"
             size="large"
@@ -234,13 +233,20 @@ const handleLogin = async () => {
     font-size: 16px;
     font-weight: 600;
     border-radius: 10px;
-    background: #409eff;
-    border: none;
+    color: #ffffff;
+    background: linear-gradient(135deg, #409eff 0%, #1677ff 100%);
+    border: 1px solid transparent;
     box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
 
     &:hover {
-      background: #66b1ff;
+      color: #ffffff;
+      background: linear-gradient(135deg, #66b1ff 0%, #409eff 100%);
       box-shadow: 0 6px 16px rgba(64, 158, 255, 0.4);
+    }
+
+    &:focus-visible {
+      color: #ffffff;
+      background: linear-gradient(135deg, #66b1ff 0%, #409eff 100%);
     }
   }
 

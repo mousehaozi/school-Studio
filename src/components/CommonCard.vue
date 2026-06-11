@@ -111,24 +111,4 @@ defineProps({
   align-items: center;
   justify-content: flex-end; // Common for pagination/actions
 }
-
-// Dark Mode Support (Basic)
-@media (prefers-color-scheme: dark) {
-  .common-card {
-    background-color: #1d1e1f;
-    border-color: #434343;
-
-    &__header {
-      border-bottom-color: #434343;
-      :deep(.page-title) {
-        color: #e5eaf3;
-      }
-    }
-
-    &__footer {
-      background-color: #262727;
-      border-top-color: #434343;
-    }
-  }
-}
 </style>
