@@ -29,6 +29,7 @@ import {
   uploadAdminImage,
   getAdminStudios,
 } from "@/api/admin";
+import { getResourceUrl } from "@/utils/baseUrl";
 
 const userStore = useUserStore();
 const loading = ref(false);
@@ -343,11 +344,11 @@ onMounted(() => {
           <template #default="{ row }">
             <el-image
               v-if="row.coverUrl"
-              :src="row.coverUrl"
+              :src="getResourceUrl(row.coverUrl)"
               style="width: 60px; height: 40px; border-radius: 4px"
               fit="cover"
               preview-teleported
-              :preview-src-list="[row.coverUrl]"
+              :preview-src-list="[getResourceUrl(row.coverUrl)]"
             />
           </template>
         </el-table-column>
@@ -452,7 +453,7 @@ onMounted(() => {
               />
               <div v-if="form.coverUrl" class="cover-preview">
                 <el-image
-                  :src="form.coverUrl"
+                  :src="getResourceUrl(form.coverUrl)"
                   fit="cover"
                   style="width: 180px; height: 100px; border-radius: 8px"
                 />

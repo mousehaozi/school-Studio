@@ -21,6 +21,7 @@ import {
   uploadAdminImage,
 } from "@/api/admin";
 import { formatDate } from "@/utils/format";
+import { getResourceUrl } from "@/utils/baseUrl";
 const loading = ref(false);
 const saving = ref(false);
 const records = ref([]);
@@ -259,7 +260,11 @@ onMounted(() => {
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column label="图标" width="80">
           <template #default="{ row }">
-            <el-avatar :size="40" :src="row.iconUrl" shape="square">
+            <el-avatar
+              :size="40"
+              :src="getResourceUrl(row.iconUrl)"
+              shape="square"
+            >
               <el-icon>
                 <Picture />
               </el-icon>
@@ -375,7 +380,7 @@ onMounted(() => {
               </template>
             </el-input>
             <div v-if="form.iconUrl" class="icon-preview">
-              <img :src="form.iconUrl" alt="Preview" />
+              <img :src="getResourceUrl(form.iconUrl)" alt="Preview" />
             </div>
           </div>
         </el-form-item>

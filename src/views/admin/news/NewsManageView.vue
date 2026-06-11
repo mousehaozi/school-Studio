@@ -31,6 +31,7 @@ import {
   uploadAdminImage,
   getAdminStudios,
 } from "@/api/admin";
+import { getResourceUrl } from "@/utils/baseUrl";
 
 const loading = ref(false);
 const saving = ref(false);
@@ -490,11 +491,11 @@ onMounted(fetchPage);
               />
               <div v-if="form.coverUrl" class="cover-preview">
                 <el-image
-                  :src="form.coverUrl"
+                  :src="getResourceUrl(form.coverUrl)"
                   fit="cover"
                   style="width: 180px; height: 100px; border-radius: 8px"
                   preview-teleported
-                  :preview-src-list="[form.coverUrl]"
+                  :preview-src-list="[getResourceUrl(form.coverUrl)]"
                 />
                 <el-button
                   text

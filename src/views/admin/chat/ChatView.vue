@@ -18,6 +18,7 @@ import {
   uploadAdminImage,
 } from "@/api/admin";
 import { formatDate } from "@/utils/format";
+import { getResourceUrl } from "@/utils/baseUrl";
 
 const userStore = useUserStore();
 const defaultAvatar =
@@ -191,11 +192,12 @@ const initWebSocket = () => {
   const token = userStore.token;
   if (!token) return;
 
-  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  const host = window.location.host;
-  // 前端通过 ws://<host>:<port>/api/v1/ws?token=<JWT> 认证
-  // 生产环境可能没有 /api 前缀，但这里对应 vite.config.js 的代理
-  const wsUrl = `${protocol}//${host}/api/ws?token=${token}`;
+  const wsBaseUrl = import.meta.env.VITE_WS_BASE_URL;
+  const wsUrl = wsBaseUrl.startsWith("/")
+    ? `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
+        window.location.host
+      }${wsBaseUrl}/ws?token=${token}`
+    : `${wsBaseUrl}/ws?token=${token}`;
 
   socket = new WebSocket(wsUrl);
 
@@ -387,7 +389,7 @@ onBeforeUnmount(() => {
             >
               <el-avatar
                 :size="48"
-                :src="session.wechatAvatar || defaultAvatar"
+                :src="getResourceUrl(session.wechatAvatar) || defaultAvatar"
               />
             </el-badge>
             <div class="session-info">
@@ -434,7 +436,9 @@ onBeforeUnmount(() => {
               <div class="header-user">
                 <el-avatar
                   :size="40"
-                  :src="currentSession.wechatAvatar || defaultAvatar"
+                  :src="
+                    getResourceUrl(currentSession.wechatAvatar) || defaultAvatar
+                  "
                 />
                 <div class="user-meta">
                   <div class="name">
@@ -492,7 +496,8 @@ onBeforeUnmount(() => {
                       :src="
                         isAdminMessage(msg)
                           ? adminAvatar
-                          : currentSession.wechatAvatar || defaultAvatar
+                          : getResourceUrl(currentSession.wechatAvatar) ||
+                            defaultAvatar
                       "
                     />
                     <div class="msg-content-box">
@@ -502,8 +507,8 @@ onBeforeUnmount(() => {
                         </template>
                         <template v-else-if="msg.msgType === 'IMAGE'">
                           <el-image
-                            :src="msg.content"
-                            :preview-src-list="[msg.content]"
+                            :src="getResourceUrl(msg.content)"
+                            :preview-src-list="[getResourceUrl(msg.content)]"
                             fit="cover"
                             class="msg-image"
                           />

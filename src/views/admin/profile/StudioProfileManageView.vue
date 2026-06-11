@@ -24,6 +24,7 @@ import {
 } from "@/api/admin";
 import { formatDateTime } from "@/utils/format";
 import { useUserStore } from "@/stores/user";
+import { getResourceHtml, getResourceUrl } from "@/utils/baseUrl";
 
 const userStore = useUserStore();
 
@@ -464,10 +465,10 @@ onMounted(fetchList);
           <div class="profile-header">
             <el-image
               v-if="currentProfile.coverUrl"
-              :src="currentProfile.coverUrl"
+              :src="getResourceUrl(currentProfile.coverUrl)"
               fit="contain"
               class="profile-cover"
-              :preview-src-list="[currentProfile.coverUrl]"
+              :preview-src-list="[getResourceUrl(currentProfile.coverUrl)]"
             />
             <div class="profile-info">
               <div class="profile-title-row">
@@ -488,7 +489,7 @@ onMounted(fetchList);
               <el-divider content-position="left">简介内容</el-divider>
               <div
                 class="profile-content ql-snow"
-                v-html="currentProfile.contentHtml"
+                v-html="getResourceHtml(currentProfile.contentHtml)"
               ></div>
             </section>
 
@@ -764,7 +765,7 @@ onMounted(fetchList);
               />
               <div v-if="form.coverUrl" class="cover-preview">
                 <el-image
-                  :src="form.coverUrl"
+                  :src="getResourceUrl(form.coverUrl)"
                   fit="cover"
                   style="
                     width: 120px;

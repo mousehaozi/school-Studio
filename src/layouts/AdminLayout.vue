@@ -5,16 +5,16 @@ import { Motion, AnimatePresence } from "motion-v";
 import { useUserStore } from "@/stores/user";
 import {
   ArrowDown,
-  ChatDotRound,
-  Collection,
-  Document,
-  Notification,
-  Picture,
-  Postcard,
+  ChatLineRound,
+  CollectionTag,
+  Connection,
+  DocumentCopy,
+  Memo,
+  OfficeBuilding,
+  PictureFilled,
   Reading,
-  School,
-  Setting,
-  User,
+  Tools,
+  UserFilled,
 } from "@element-plus/icons-vue";
 
 const router = useRouter();
@@ -40,7 +40,9 @@ const asideWidth = computed(() => (isCollapsed.value ? "64px" : "220px"));
 const activeMenu = computed(() => route.path);
 
 function goDefault() {
-  router.push("/admin/banner");
+  router.push(
+    userStore.role === "SUPERADMIN" ? "/admin/banner" : "/admin/profile"
+  );
 }
 
 function handleCommand(cmd) {
@@ -66,7 +68,7 @@ function handleCommand(cmd) {
       <div class="admin-header__right">
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="admin-user">
-            <el-icon class="admin-user__icon"><User /></el-icon>
+            <el-icon class="admin-user__icon"><UserFilled /></el-icon>
             <span class="admin-user__label">
               {{ userStore.username || "管理员" }}
             </span>
@@ -93,7 +95,7 @@ function handleCommand(cmd) {
             v-if="userStore.role === 'SUPERADMIN'"
             index="/admin/account"
           >
-            <el-icon><User /></el-icon>
+            <el-icon><UserFilled /></el-icon>
             <span>账号系统</span>
           </el-menu-item>
 
@@ -101,7 +103,7 @@ function handleCommand(cmd) {
             v-if="userStore.role === 'SUPERADMIN'"
             index="/admin/studios"
           >
-            <el-icon><School /></el-icon>
+            <el-icon><OfficeBuilding /></el-icon>
             <span>工作室管理</span>
           </el-menu-item>
 
@@ -109,32 +111,32 @@ function handleCommand(cmd) {
             v-if="userStore.role === 'SUPERADMIN'"
             index="/admin/banner"
           >
-            <el-icon><Picture /></el-icon>
+            <el-icon><PictureFilled /></el-icon>
             <span>轮播图</span>
           </el-menu-item>
 
           <el-menu-item index="/admin/profile">
-            <el-icon><Document /></el-icon>
+            <el-icon><Memo /></el-icon>
             <span>工作室简介</span>
           </el-menu-item>
 
           <el-menu-item index="/admin/studio-intro-article">
-            <el-icon><Postcard /></el-icon>
+            <el-icon><DocumentCopy /></el-icon>
             <span>工作室简介图文</span>
           </el-menu-item>
 
           <el-menu-item index="/admin/news">
-            <el-icon><Notification /></el-icon>
+            <el-icon><Reading /></el-icon>
             <span>工作动态</span>
           </el-menu-item>
 
           <el-sub-menu index="cooperation">
             <template #title>
-              <el-icon><Collection /></el-icon>
+              <el-icon><Connection /></el-icon>
               <span>产教融合</span>
             </template>
             <el-menu-item index="/admin/topics">
-              <el-icon><Collection /></el-icon>
+              <el-icon><CollectionTag /></el-icon>
               <span>主题管理</span>
             </el-menu-item>
             <el-menu-item index="/admin/articles">
@@ -147,7 +149,7 @@ function handleCommand(cmd) {
             v-if="userStore.role === 'SUPERADMIN'"
             index="/admin/chat"
           >
-            <el-icon><ChatDotRound /></el-icon>
+            <el-icon><ChatLineRound /></el-icon>
             <span>在线咨询</span>
           </el-menu-item>
 
@@ -155,17 +157,17 @@ function handleCommand(cmd) {
             v-if="userStore.role === 'SUPERADMIN'"
             index="/admin/system-configs"
           >
-            <el-icon><Setting /></el-icon>
+            <el-icon><Tools /></el-icon>
             <span>系统配置</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
 
       <el-main class="admin-main">
-        <router-view v-slot="{ Component, route }">
+        <router-view v-slot="{ Component, route: currentRoute }">
           <AnimatePresence mode="wait">
             <Motion
-              :key="route.path"
+              :key="currentRoute.path"
               as="div"
               class="main-content-motion"
               :initial="{ opacity: 0, x: 10 }"
@@ -225,10 +227,11 @@ function handleCommand(cmd) {
 }
 
 .admin-brand__sub {
-  font-size: 12px;
-  color: #909399;
-  letter-spacing: 0.5px;
+  font-size: 15px;
+  color: #6b5b4b;
+  letter-spacing: 1px;
   margin-top: 2px;
+  font-family: "STLiti", "LiSu", "STKaiti", "KaiTi", "FangSong", serif;
 }
 
 .admin-user {

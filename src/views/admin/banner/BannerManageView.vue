@@ -20,6 +20,7 @@ import {
   updateAdminStudioBanner,
   uploadAdminImage,
 } from "@/api/admin";
+import { getResourceUrl } from "@/utils/baseUrl";
 
 const loading = ref(false);
 const saving = ref(false);
@@ -211,11 +212,11 @@ onMounted(fetchList);
           <template #default="{ row }">
             <el-image
               v-if="row.imageUrl"
-              :src="row.imageUrl"
+              :src="getResourceUrl(row.imageUrl)"
               fit="cover"
               style="width: 96px; height: 54px; border-radius: 6px"
               preview-teleported
-              :preview-src-list="[row.imageUrl]"
+              :preview-src-list="[getResourceUrl(row.imageUrl)]"
             />
             <span v-else>-</span>
           </template>
@@ -286,11 +287,11 @@ onMounted(fetchList);
               />
               <div v-if="form.imageUrl" class="image-preview">
                 <el-image
-                  :src="form.imageUrl"
+                  :src="getResourceUrl(form.imageUrl)"
                   fit="cover"
                   style="width: 180px; height: 100px; border-radius: 8px"
                   preview-teleported
-                  :preview-src-list="[form.imageUrl]"
+                  :preview-src-list="[getResourceUrl(form.imageUrl)]"
                 />
                 <el-button
                   text

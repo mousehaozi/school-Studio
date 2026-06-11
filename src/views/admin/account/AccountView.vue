@@ -22,6 +22,7 @@ import {
   getAdminStudios,
 } from "@/api/admin";
 import { formatDate as genericFormatDate } from "@/utils/format";
+import { getResourceUrl } from "@/utils/baseUrl";
 
 const loading = ref(false);
 const saving = ref(false);
@@ -340,7 +341,7 @@ onMounted(() => {
               <el-avatar
                 v-if="row.wechatAvatar"
                 :size="32"
-                :src="row.wechatAvatar"
+                :src="getResourceUrl(row.wechatAvatar)"
               />
               <span class="nickname">{{ row.wechatNickname || "-" }}</span>
             </div>
